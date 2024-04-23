@@ -75,4 +75,4 @@ def test_users_can_delete_own_and_cant_another_user_comments(
     """Проверка что пользователи могут удалять свои/чужие комментарии."""
     response = user.delete(reverse('news:delete', args=[news.id]))
     assert response.status_code == expected_status
-    assert Comment.objects.count() == total_comments_in_DB
+    assert Comment.objects.count() == total_comments_in_db
