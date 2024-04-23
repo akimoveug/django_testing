@@ -15,7 +15,7 @@ def test_pages_availability_for_anonymous_user(client, page):
     """и страницы входа, регистрации, выхода из аккуанта."""
     response = client.get(reverse(page))
     assert response.status_code == HTTPStatus.OK, (
-         f'Анонимный пользователь должен попадать на страницу {page}'
+        f'Анонимный пользователь должен попадать на страницу {page}'
     )
 
 
@@ -41,7 +41,7 @@ def test_news_detail_page_available_for_anonimous_user(client, news):
     ('news:edit', 'news:delete')
 )
 def test_availability_delete_update_comment_for_author_or_auth_user(
-    user,  expected_status, url, news, comment
+    user, expected_status, url, news, comment
 ):
     """Тестируем возможность попасть на страницы редактирования."""
     """ и удаления коментариев (своих и чужих)."""

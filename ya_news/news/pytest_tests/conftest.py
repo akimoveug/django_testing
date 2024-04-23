@@ -72,9 +72,8 @@ def news10():
 
 @pytest.fixture
 def form_data(news, author):
-    """Заполненная форма."""
+    """Заполненная форма комментария."""
     return {
         'news': news,
-        #'author': author,
         'text': 'Текст комментрария',
     }

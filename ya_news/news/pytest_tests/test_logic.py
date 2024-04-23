@@ -26,7 +26,6 @@ def test_anonimous_user_cant_send_comment(client, news, form_data):
 def test_auth_user_can_send_comment(author_client, news, form_data):
     """Авторизованный пользователь может отправить комментарий."""
     detail_post(author_client, news, form_data)
-    a=Comment.objects.count()
     assert Comment.objects.count() == 1, (
         'Проверьте, что авторизованный пользователь может '
         'отправить комментарий'
@@ -64,14 +63,14 @@ def test_users_can_edit_own_and_cant_another_user_comments(
 
 
 @pytest.mark.parametrize(
-    'user, expected_status, total_comments_in_DB',
+    'user, expected_status, total_comments_in_db',
     (
         (pytest.lazy_fixture('author_client'), HTTPStatus.FOUND, 0),
         (pytest.lazy_fixture('auth_user_client'), HTTPStatus.NOT_FOUND, 1)
     ),
 )
 def test_users_can_delete_own_and_cant_another_user_comments(
-    user, expected_status, comment, news, total_comments_in_DB
+    user, expected_status, comment, news, total_comments_in_db
 ):
     """Проверка что пользователи могут удалять свои/чужие комментарии."""
     response = user.delete(reverse('news:delete', args=[news.id]))
