@@ -1,9 +1,19 @@
-import pytest
+from datetime import datetime, timedelta
 
+import pytest
+from django.conf import settings
 from django.test.client import Client
+from django.urls import reverse
 
 from news.models import News, Comment
-from datetime import datetime, timedelta
+
+
+FORM_DATA = {'text': 'Текст комментрария1'}
+
+
+def news_detail(user_method, reversed_url, data=None):
+    """Запрос к news:detail пользователем выбранным методом."""
+    return user_method(reversed_url, data)
 
 
 @pytest.fixture
@@ -56,8 +66,8 @@ def comment(author, news):
 
 
 @pytest.fixture
-def news10():
-    """Создание 10 новостей для теста главной страницы."""
+def some_news():
+    """Создание новостей для теста главной страницы."""
     today = datetime.today()
 
     News.objects.bulk_create(
@@ -66,14 +76,45 @@ def news10():
             text='Текст.',
             date=today - timedelta(days=index)
         )
-        for index in range(11)
+        for index in range(settings.NEWS_COUNT_ON_HOME_PAGE+1)
     )
 
 
+@pytest.fixture(autouse=True)
+def enable_db_access_for_all_tests(db):
+    pass
+
+
 @pytest.fixture
-def form_data(news, author):
-    """Заполненная форма комментария."""
-    return {
-        'news': news,
-        'text': 'Текст комментрария',
-    }
+def login_url():
+    return reverse('users:login')
+
+
+@pytest.fixture
+def logout_url():
+    return reverse('users:login')
+
+
+@pytest.fixture
+def signup_url():
+    return reverse('users:signup')
+
+
+@pytest.fixture
+def home_url():
+    return reverse('news:home')
+
+
+@pytest.fixture
+def news_detail_url(news):
+    return reverse('news:detail', args=[news.id])
+
+
+@pytest.fixture
+def news_edit_url(news):
+    return reverse('news:edit', args=[news.id])
+
+
+@pytest.fixture
+def news_delete_url(news):
+    return reverse('news:delete', args=[news.id])
