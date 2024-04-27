@@ -22,7 +22,7 @@ class TestLogic(Test):
         return user.post(self.NOTES_ADD, self.form_data)
     
     def get_note(self):
-        """Получем объект заметки."""
+        """Получаем объект заметки."""
         return Note.objects.get(id=self.author_note.id)
 
     def test_authorized_user_can_create_note(self):

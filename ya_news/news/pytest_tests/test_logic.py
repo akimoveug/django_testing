@@ -10,7 +10,7 @@ from news.models import Comment
 from news.pytest_tests.conftest import FORM_DATA, news_detail
 
 
-def test_anonimous_user_cant_send_comment(client, news_detail_url):
+def test_anonymous_user_cant_send_comment(client, news_detail_url):
     """Аноним не может отправить комментарий к новости."""
     comments_in_db = Comment.objects.count()
     news_detail(client.post, news_detail_url, FORM_DATA)
@@ -47,7 +47,7 @@ def test_user_cant_use_bad_words(author_client, news_detail_url):
     """Пользователь не может отправлять комментарий с плохими словами."""
     comments_in_db = Comment.objects.count()
     form_data = {
-        'text': f'Текст комментрария {choice(BAD_WORDS)}',
+        'text': f'Текст комментария {choice(BAD_WORDS)}',
     }
     response = news_detail(author_client.post, news_detail_url, form_data)
     assertFormError(response, 'form', 'text', WARNING)

@@ -29,7 +29,7 @@ def test_pages_availability(
 @pytest.mark.parametrize(
     'reverse_url', lf(('news_edit_url', 'news_delete_url'))
 )
-def test_edit_delete_redirects_for_anonimous_user(
+def test_edit_delete_redirects_for_anonymous_user(
     client, reverse_url, login_url
 ):
     """Тестирование возможности анониму изменить или удалить комментарий."""
