@@ -7,7 +7,9 @@ from pytest_lazyfixture import lazy_fixture
 
 from news.forms import BAD_WORDS, WARNING
 from news.models import Comment
-from news.pytest_tests.conftest import FORM_DATA, news_detail, UPDATED_FORM_DATA
+from news.pytest_tests.conftest import (
+    FORM_DATA, news_detail, UPDATED_FORM_DATA
+)
 
 
 def test_anonymous_user_cant_send_comment(client, news_detail_url):
@@ -57,7 +59,7 @@ def test_user_cant_use_bad_words(author_client, news_detail_url):
 
 
 def test_users_can_edit_own_comment(
-   author, author_client, comment, news_edit_url, news
+    author, author_client, comment, news_edit_url, news
 ):
     """Пользователь может изменить свой комментарий."""
     response = author_client.post(news_edit_url, UPDATED_FORM_DATA)
@@ -71,7 +73,7 @@ def test_users_can_edit_own_comment(
 
 
 def test_user_cant_edit_another_user_comment(
-   author, auth_user_client, comment, news_edit_url, news
+    author, auth_user_client, comment, news_edit_url, news
 ):
     """Пользователь не может изменить чужой комментарий."""
     response = auth_user_client.post(news_edit_url, UPDATED_FORM_DATA)

@@ -92,10 +92,11 @@ class TestLogic(Test):
             self.assertEqual(updated_note.text, self.new_note_form['text'])
             self.assertEqual(updated_note.author, self.author)
 
-
     def test_user_cant_edit_another_user_note(self):
         """Пользователь не может изменить чужую заметку."""
-        for user, expected_status in ((self.auth_user_client, HTTPStatus.NOT_FOUND),):
+        for user, expected_status in (
+            (self.auth_user_client, HTTPStatus.NOT_FOUND),
+        ):
             original_note = self.get_note()
             response = user.post(self.NOTES_EDIT, self.new_note_form)
             updated_note = self.get_note()
