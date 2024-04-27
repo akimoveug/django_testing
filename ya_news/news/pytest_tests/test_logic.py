@@ -35,10 +35,10 @@ def test_auth_user_can_send_comment(
         'отправить комментарий'
     )
     assert new_comment.text == FORM_DATA['text'], (
-        'Текст созданного коментария не совпадает с отправленным'
+        'Текст созданного комментария не совпадает с отправленным'
     )
     assert new_comment.author == author, (
-        f'У созданного коментария не тот автор - {new_comment.author}'
+        f'У созданного комментария не тот автор - {new_comment.author}'
     )
     assert new_comment.news == news, (
         f'Комментарий добавлен не к той новости - {new_comment.news}'
@@ -96,7 +96,7 @@ def test_user_cant_edit_another_user_comment(
 def test_users_can_delete_own_and_cant_another_user_comments(
     user, expected_status, comment, total_comments_in_db, news_delete_url
 ):
-    """Проверка что пользователи могут удалять свои/чужие комментарии."""
+    """Проверка, что пользователи могут удалять свои/чужие комментарии."""
     response = user.delete(news_delete_url)
     assert response.status_code == expected_status
     assert Comment.objects.count() == total_comments_in_db
