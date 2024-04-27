@@ -7,7 +7,7 @@ from pytest_lazyfixture import lazy_fixture
 
 from news.forms import BAD_WORDS, WARNING
 from news.models import Comment
-from news.pytest_tests.conftest import FORM_DATA, news_detail
+from news.pytest_tests.conftest import FORM_DATA, news_detail, UPDATED_FORM_DATA
 
 
 def test_anonymous_user_cant_send_comment(client, news_detail_url):
@@ -56,24 +56,31 @@ def test_user_cant_use_bad_words(author_client, news_detail_url):
     )
 
 
-@pytest.mark.parametrize(
-    'user, expected_status, comment_not_changed',
-    (
-        (lazy_fixture('author_client'), HTTPStatus.FOUND, False),
-        (lazy_fixture('auth_user_client'), HTTPStatus.NOT_FOUND, True)
-    ),
-)
-def test_users_can_edit_own_and_cant_another_user_comments(
-    user, expected_status, comment_not_changed, comment, news_edit_url
+def test_users_can_edit_own_comment(
+   author, author_client, comment, news_edit_url, news
 ):
-    """Пользователи могут редактировать свои комментарии
-    И не могут редактировать чужие комментарии.
-    """
-    response = user.post(news_edit_url, {'text': 'Новый текст'})
+    """Пользователь может изменить свой комментарий."""
+    response = author_client.post(news_edit_url, UPDATED_FORM_DATA)
     updated_comment = Comment.objects.get(id=comment.id)
-    assert response.status_code == expected_status
-    assert (comment.text == updated_comment.text) is comment_not_changed, (
+    assert response.status_code == HTTPStatus.FOUND
+    assert updated_comment.news == news, 'Новость изменилась'
+    assert updated_comment.author == author, 'Автор изменился'
+    assert updated_comment.text == UPDATED_FORM_DATA['text'], (
         'Текст комментария не изменился'
+    )
+
+
+def test_user_cant_edit_another_user_comment(
+   author, auth_user_client, comment, news_edit_url, news
+):
+    """Пользователь не может изменить чужой комментарий."""
+    response = auth_user_client.post(news_edit_url, UPDATED_FORM_DATA)
+    updated_comment = Comment.objects.get(id=comment.id)
+    assert response.status_code == HTTPStatus.NOT_FOUND
+    assert updated_comment.news == news, 'Новость изменилась'
+    assert updated_comment.author == author, 'Автор изменился'
+    assert updated_comment.text != UPDATED_FORM_DATA['text'], (
+        'Текст комментария изменился'
     )
 
 

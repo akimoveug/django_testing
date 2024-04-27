@@ -8,7 +8,8 @@ from django.urls import reverse
 from news.models import Comment, News
 
 
-FORM_DATA = {'text': 'Текст комментрария'}
+FORM_DATA = {'text': 'Текст комментария'}
+UPDATED_FORM_DATA = {'text': 'Новый текст'}
 
 
 @pytest.fixture(autouse=True)
