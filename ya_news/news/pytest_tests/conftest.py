@@ -5,10 +5,16 @@ from django.conf import settings
 from django.test.client import Client
 from django.urls import reverse
 
-from news.models import News, Comment
+from news.models import Comment, News
 
 
-FORM_DATA = {'text': 'Текст комментрария1'}
+FORM_DATA = {'text': 'Текст комментрария'}
+
+
+@pytest.fixture(autouse=True)
+def enable_db_access_for_all_tests(db):
+    """Подключение БД к тестам."""
+    pass
 
 
 def news_detail(user_method, reversed_url, data=None):
@@ -50,8 +56,8 @@ def auth_user_client(auth_user):
 def news():
     """Создание новости."""
     return News.objects.create(
-        title='Заголовок',
-        text='Текст новости',
+        title='Новость_1',
+        text='Текст новости_1',
     )
 
 
@@ -78,11 +84,6 @@ def some_news():
         )
         for index in range(settings.NEWS_COUNT_ON_HOME_PAGE + 1)
     )
-
-
-@pytest.fixture(autouse=True)
-def enable_db_access_for_all_tests(db):
-    pass
 
 
 @pytest.fixture

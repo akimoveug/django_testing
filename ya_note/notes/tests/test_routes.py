@@ -1,6 +1,6 @@
 from http import HTTPStatus
 
-from .fixtures import Test
+from notes.tests.fixtures import Test
 
 
 class TestRoutes(Test):
@@ -43,7 +43,7 @@ class TestRoutes(Test):
         )
 
     def test_pages_availability(self):
-        """Тестирование доступности страниц для пользователей"""
+        """Тестирование доступности страниц для пользователей."""
         for reversed_url, users in (
             self.HOMEPAGE_USER_STATUS
             + self.PAGES_USERS_STATUSES
@@ -55,7 +55,7 @@ class TestRoutes(Test):
                     self.assertEqual(response.status_code, status)
 
     def test_redirect_for_anonymous_client(self):
-        """Тестирование редиректа анонима"""
+        """Тестирование редиректа анонима."""
         for reversed_url, users in self.PAGES_USERS_STATUSES:
             with self.subTest(reversed_url=reversed_url):
                 self.assertRedirects(

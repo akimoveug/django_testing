@@ -44,7 +44,7 @@ def test_anonymous_client_has_no_form(client, news_detail_url):
 
 
 def test_authorized_client_has_form(author_client, news_detail_url):
-    """авторизованному пользователю доступна форма для отправки комментария."""
+    """Авторизованному пользователю доступна форма для отправки комментария."""
     response = news_detail(author_client.get, news_detail_url)
     assert 'form' in response.context, (
         'В контексте не передаётся форма'
