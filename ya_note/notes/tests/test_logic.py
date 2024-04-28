@@ -84,26 +84,22 @@ class TestLogic(Test):
 
     def test_user_can_edit_own_note(self):
         """Пользователь может изменить свою заметку."""
-        for user, expected_status in ((self.author_client, HTTPStatus.FOUND),):
-            response = user.post(self.NOTES_EDIT, self.new_note_form)
-            updated_note = self.get_note()
-            self.assertEqual(response.status_code, expected_status)
-            self.assertEqual(updated_note.title, self.new_note_form['title'])
-            self.assertEqual(updated_note.text, self.new_note_form['text'])
-            self.assertEqual(updated_note.author, self.author)
+        response = self.author_client.post(self.NOTES_EDIT, self.new_note_form)
+        updated_note = self.get_note()
+        self.assertEqual(response.status_code, HTTPStatus.FOUND)
+        self.assertEqual(updated_note.title, self.new_note_form['title'])
+        self.assertEqual(updated_note.text, self.new_note_form['text'])
+        self.assertEqual(updated_note.author, self.author)
 
     def test_user_cant_edit_another_user_note(self):
         """Пользователь не может изменить чужую заметку."""
-        for user, expected_status in (
-            (self.auth_user_client, HTTPStatus.NOT_FOUND),
-        ):
-            original_note = self.get_note()
-            response = user.post(self.NOTES_EDIT, self.new_note_form)
-            updated_note = self.get_note()
-            self.assertEqual(response.status_code, expected_status)
-            self.assertEqual(updated_note.title, original_note.title)
-            self.assertEqual(updated_note.text, original_note.text)
-            self.assertEqual(updated_note.author, self.author)
+        original_note = self.get_note()
+        response = self.auth_user_client.post(self.NOTES_EDIT, self.new_note_form)
+        updated_note = self.get_note()
+        self.assertEqual(response.status_code, HTTPStatus.NOT_FOUND)
+        self.assertEqual(updated_note.title, original_note.title)
+        self.assertEqual(updated_note.text, original_note.text)
+        self.assertEqual(updated_note.author, self.author)
 
     def test_user_can_delete_own_note_and_cant_another_user(self):
         """Пользователи могут удалять свои заметки, но не могут чужие."""

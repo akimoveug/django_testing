@@ -65,8 +65,8 @@ def test_users_can_edit_own_comment(
     response = author_client.post(news_edit_url, UPDATED_FORM_DATA)
     updated_comment = Comment.objects.get(id=comment.id)
     assert response.status_code == HTTPStatus.FOUND
-    assert updated_comment.news == news, 'Новость изменилась'
-    assert updated_comment.author == author, 'Автор изменился'
+    assert updated_comment.news == comment.news, 'Новость изменилась'
+    assert updated_comment.author == comment.author, 'Автор изменился'
     assert updated_comment.text == UPDATED_FORM_DATA['text'], (
         'Текст комментария не изменился'
     )
@@ -79,9 +79,9 @@ def test_user_cant_edit_another_user_comment(
     response = auth_user_client.post(news_edit_url, UPDATED_FORM_DATA)
     updated_comment = Comment.objects.get(id=comment.id)
     assert response.status_code == HTTPStatus.NOT_FOUND
-    assert updated_comment.news == news, 'Новость изменилась'
-    assert updated_comment.author == author, 'Автор изменился'
-    assert updated_comment.text != UPDATED_FORM_DATA['text'], (
+    assert updated_comment.news == comment.news, 'Новость изменилась'
+    assert updated_comment.author == comment.author, 'Автор изменился'
+    assert updated_comment.text == comment.text, (
         'Текст комментария изменился'
     )
 
